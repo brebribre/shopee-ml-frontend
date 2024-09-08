@@ -31,7 +31,7 @@ export const useSendExcel = () => {
       return { fileUrl: URL.createObjectURL(blob), error: null };
     } catch (error) {
       console.error(error);
-      return { fileUrl: null, error: 'Error processing the file. Please try again.' };
+      return { fileUrl: null, error: error };
     }
   };
 
