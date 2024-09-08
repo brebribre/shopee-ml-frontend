@@ -13,13 +13,4 @@ import Dashboard from './components/Dashboard.vue'
   display: flex;
   height: 100vh;
 }
-
-.sidebar{
-  width: 20%;
-  border-right: 0.5vh solid hwb(0 9% 90%);
-}
-
-.dashboard{
-  width: 80%;
-}
 </style>

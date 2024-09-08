@@ -27,7 +27,9 @@ defineProps<{ }>()
   display: flex;
   flex-direction: column;
   margin-top: 24px;
+  text-align: center;
   align-items: center;
+  width: 100%;
 }
 
 h2 {

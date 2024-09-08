@@ -6,7 +6,6 @@ export const useSendExcel = () => {
     formData.append('file', data);
 
     try {
-      // Send the file to the API and track upload/download progress
       const response = await axios.post("https://shopee-ml-d450b518bfd7.herokuapp.com/api/process-excel", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',  // Explicitly set content type
@@ -16,12 +15,6 @@ export const useSendExcel = () => {
           if (onUploadProgress && progressEvent.total) {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             onUploadProgress(percentCompleted); // Call the provided progress function
-          }
-        },
-        onDownloadProgress: (progressEvent) => {
-          if (onDownloadProgress && progressEvent.total) {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            onDownloadProgress(percentCompleted); // Call the provided progress function
           }
         }
       });

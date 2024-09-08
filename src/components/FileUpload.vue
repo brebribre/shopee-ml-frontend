@@ -69,6 +69,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    max-width: 500px;
   }
 
   .error {
@@ -76,7 +77,6 @@
   }
   
   progress {
-    width: 100%;
     margin-top: 10px;
   }
 
