@@ -10,6 +10,7 @@
 
   const isLoading = ref<boolean>(false);
   const uploadProgress = ref<number>(0);
+  const downloadProgress = ref<number>(0);
   
   const { sendExcel } = useSendExcel();
   const submitFile = async () => {
@@ -24,6 +25,9 @@
       (progress: number) => {
         uploadProgress.value = progress;
       },
+      (progress: number) => {
+        downloadProgress.value = progress;
+      }
     );
   
     if (error) {
@@ -49,7 +53,11 @@
         <div class="upload">
             <input type="file" @change="onFileChange" />
             <button @click="submitFile" :disabled="!selectedFile || isLoading">
-                <span v-if="isLoading">Uploading... {{ uploadProgress }}%</span>
+                <span v-if="isLoading">
+                  <span v-if="uploadProgress < 100">Uploading... {{ uploadProgress }}%</span>
+                  <span v-else-if="downloadProgress < 100 && downloadProgress > 0">Processing... {{ downloadProgress }}%</span>
+                  <span v-else>Processing...</span>
+                </span>
                 <span v-else>Upload File</span>
             </button>
         </div>
@@ -57,7 +65,6 @@
         <div v-if="fileUrl">
             <a :href="fileUrl" download="processed_file.xlsx">Download Processed File</a>
         </div>
-    
         <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
     </div>
   </template>
