@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import Dashboard from './components/Dashboard.vue'
-import Sidebar from './components/Sidebar.vue'
 </script>
 
 <template>
   <div class="main">
-    <Sidebar class="sidebar" />
     <Dashboard class="dashboard" />
   </div>
 </template>
