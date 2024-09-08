@@ -8,6 +8,9 @@ export const useSendExcel = () => {
     try {
       // Send the file to the API and track upload/download progress
       const response = await axios.post("https://shopee-ml-d450b518bfd7.herokuapp.com/api/process-excel", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',  // Explicitly set content type
+        },
         responseType: 'blob',
         onUploadProgress: (progressEvent) => {
           if (onUploadProgress && progressEvent.total) {
