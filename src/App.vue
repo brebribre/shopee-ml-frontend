@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Dashboard from './components/Dashboard.vue'
+import Dashboard from './components/Dashboard.vue';
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import Dashboard from './components/Dashboard.vue'
 </template>
 
 <style scoped>
-.main{
+.main {
   display: flex;
   height: 100vh;
 }

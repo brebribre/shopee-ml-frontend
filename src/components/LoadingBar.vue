@@ -3,9 +3,9 @@ defineProps<{ isLoading: boolean }>();
 </script>
 
 <template>
-    <div v-if="isLoading" class="progress-bar-container">
-        <div class="progress-bar"></div>
-    </div>
+  <div v-if="isLoading" class="progress-bar-container">
+    <div class="progress-bar"></div>
+  </div>
 </template>
 
 <style scoped>

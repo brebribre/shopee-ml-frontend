@@ -1,29 +1,41 @@
 import axios from 'axios';
 
 export const useSendExcel = () => {
-  const sendExcel = async (data: File, onUploadProgress?: (progress: number) => void, onDownloadProgress?: (progress: number) => void) => {
+  const sendExcel = async (
+    data: File,
+    onUploadProgress?: (progress: number) => void,
+    onDownloadProgress?: (progress: number) => void
+  ) => {
     const formData = new FormData();
     formData.append('file', data);
 
     try {
-      const response = await axios.post("https://oyster-app-s5mct.ondigitalocean.app/api/process-excel", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', 
-        },
-        responseType: 'blob',
-        onUploadProgress: (progressEvent) => {
-          if (onUploadProgress && progressEvent.total) {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            onUploadProgress(percentCompleted); 
-          }
-        },
-        onDownloadProgress: (progressEvent) => {
-          if (onDownloadProgress && progressEvent.total) {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            onDownloadProgress(percentCompleted); 
-          }
+      const response = await axios.post(
+        'https://oyster-app-s5mct.ondigitalocean.app/api/process-excel',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          responseType: 'blob',
+          onUploadProgress: (progressEvent) => {
+            if (onUploadProgress && progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              onUploadProgress(percentCompleted);
+            }
+          },
+          onDownloadProgress: (progressEvent) => {
+            if (onDownloadProgress && progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              onDownloadProgress(percentCompleted);
+            }
+          },
         }
-      });
+      );
 
       const blob = new Blob([response.data], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -32,7 +44,10 @@ export const useSendExcel = () => {
       return { fileUrl: URL.createObjectURL(blob), error: null };
     } catch (error) {
       console.error(error);
-      return { fileUrl: null, error: 'Error processing the file. Please try again.' };
+      return {
+        fileUrl: null,
+        error: 'Error processing the file. Please try again.',
+      };
     }
   };
 
