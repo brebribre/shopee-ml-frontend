@@ -48,7 +48,7 @@ const onFileChange = (event: Event) => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="file-container">
     <div class="upload">
       <input type="file" @change="onFileChange" />
       <button @click="submitFile" :disabled="!selectedFile || isLoading">
@@ -65,7 +65,7 @@ const onFileChange = (event: Event) => {
       </button>
     </div>
     <LoadingBar :isLoading="isLoading" />
-    <div v-if="fileUrl">
+    <div v-if="fileUrl" class="statusMessage">
       <a :href="fileUrl" download="processed_file.xlsx"
         >Download Processed File</a
       >
@@ -75,18 +75,20 @@ const onFileChange = (event: Event) => {
 </template>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 500px;
-}
 
 .error {
   color: red;
+  text-align: center;
 }
 
-progress {
-  margin-top: 10px;
+.statusMessage {
+  text-align: center;
+}
+
+.upload{
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
