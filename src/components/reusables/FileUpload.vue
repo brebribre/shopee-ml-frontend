@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useSendExcel } from '../hooks/useSendExcel';
+import { useSendExcel } from '../../hooks/useSendExcel';
 import LoadingBar from './LoadingBar.vue';
 
 const selectedFile = ref<File | null>(null);
