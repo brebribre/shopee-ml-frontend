@@ -17,4 +17,9 @@ a {
   padding: 8px 12px;
   color: whitesmoke;
 }
+
+button {
+  display: flex;
+  align-items: center;
+}
 </style>

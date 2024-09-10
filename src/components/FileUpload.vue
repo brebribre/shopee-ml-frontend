@@ -66,16 +66,15 @@ const onFileChange = (event: Event) => {
     </div>
     <LoadingBar :isLoading="isLoading" />
     <div v-if="fileUrl" class="statusMessage">
-      <a :href="fileUrl" download="processed_file.xlsx"
-        >Download Processed File</a
-      >
+      <button :href="fileUrl" download="processed_file.xlsx" class="download">
+        Download Processed File
+      </button>
     </div>
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
   </div>
 </template>
 
 <style scoped>
-
 .error {
   color: red;
   text-align: center;
@@ -85,10 +84,15 @@ const onFileChange = (event: Event) => {
   text-align: center;
 }
 
-.upload{
+.upload {
   display: flex;
   flex-grow: 1;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.download {
+  width: 100%;
 }
 </style>

@@ -65,23 +65,20 @@ const handleGetSampleFile = async () => {
 <style scoped>
 .container {
   display: grid;
-  grid-template-columns: 1fr 3fr;
-  gap: 16px; /* Optional: Adjust the gap between the grid items */
-  width: 100%;
+  grid-template-columns: 1fr 3.5fr;
+  gap: 16px;
+  height: 95vh;
 }
 
 .left {
   padding: 24px;
   border-right: 4px solid #312c2c;
+  overflow: hidden; /* Ensure the left side is static */
 }
 
 .right {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-a {
-  cursor: pointer;
+  overflow-y: auto; /* Make the right side scrollable */
+  overflow-x: hidden;
+  padding: 24px; /* Optional: Add padding to the right side */
 }
 </style>
