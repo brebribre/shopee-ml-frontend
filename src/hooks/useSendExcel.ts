@@ -6,27 +6,25 @@ export const useSendExcel = () => {
     formData.append('file', data);
 
     try {
-      // Send the file to the API and track upload/download progress
       const response = await axios.post("https://oyster-app-s5mct.ondigitalocean.app/api/process-excel", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',  // Explicitly set content type
+          'Content-Type': 'multipart/form-data', 
         },
         responseType: 'blob',
         onUploadProgress: (progressEvent) => {
           if (onUploadProgress && progressEvent.total) {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            onUploadProgress(percentCompleted); // Call the provided progress function
+            onUploadProgress(percentCompleted); 
           }
         },
         onDownloadProgress: (progressEvent) => {
           if (onDownloadProgress && progressEvent.total) {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            onDownloadProgress(percentCompleted); // Call the provided progress function
+            onDownloadProgress(percentCompleted); 
           }
         }
       });
 
-      // Create a Blob from the response data
       const blob = new Blob([response.data], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
