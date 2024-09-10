@@ -5,6 +5,7 @@ import LoadingBar from './LoadingBar.vue';
 
 const selectedFile = ref<File | null>(null);
 const fileUrl = ref<string | null>(null);
+const jsonData = ref<JSON>();
 
 const errorMessage = ref<string | null>(null);
 
@@ -12,7 +13,8 @@ const isLoading = ref<boolean>(false);
 const uploadProgress = ref<number>(0);
 const downloadProgress = ref<number>(0);
 
-const { sendExcel } = useSendExcel();
+const { sendExcel, sendExcelForJson } = useSendExcel();
+
 const submitFile = async () => {
   fileUrl.value = null;
   if (!selectedFile.value) return;
@@ -54,10 +56,10 @@ const onFileChange = (event: Event) => {
       <button @click="submitFile" :disabled="!selectedFile || isLoading">
         <span v-if="isLoading">
           <span v-if="uploadProgress < 100"
-            >Uploading... {{ uploadProgress }}%</span
+            >{{ uploadProgress }}%</span
           >
           <span v-else-if="downloadProgress < 100 && downloadProgress > 0"
-            >Processing... {{ downloadProgress }}%</span
+            >{{ downloadProgress }}%</span
           >
           <span v-else>Processing...</span>
         </span>
@@ -75,6 +77,24 @@ const onFileChange = (event: Event) => {
 </template>
 
 <style scoped>
+.file-container{
+  border: 2px solid #312c2c;
+  border-radius: 0.5rem;
+  padding: 16px;
+}
+
+.upload {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  margin-bottom: 8px;
+}
+
+.input {
+  font-size:16px;
+}
+
 .error {
   color: red;
   text-align: center;
@@ -82,21 +102,6 @@ const onFileChange = (event: Event) => {
 
 .statusMessage {
   text-align: center;
-}
-
-.upload {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 16px;
-
-  border: 2px solid #312c2c;
-  border-radius: 1rem;
-}
-
-.input {
-  font-size: 16px;
 }
 
 .download {

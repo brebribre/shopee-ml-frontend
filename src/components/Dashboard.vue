@@ -113,11 +113,11 @@ p {
   width: 100%;
 }
 
-.acc-content{
+.acc-content {
   margin-top: 16px;
 }
 
-.title{
+.title {
   font-size: 2rem;
   font-weight: 700;
 }
