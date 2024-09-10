@@ -13,5 +13,6 @@ import NavigationBar from './components/NavigationBar.vue';
 <style scoped>
 .nav {
   height: 5vh;
+  border-bottom: 4px solid #312c2c;
 }
 </style>

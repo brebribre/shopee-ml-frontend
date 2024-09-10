@@ -50,7 +50,7 @@ const onFileChange = (event: Event) => {
 <template>
   <div class="file-container">
     <div class="upload">
-      <input type="file" @change="onFileChange" />
+      <input type="file" @change="onFileChange" class="input" />
       <button @click="submitFile" :disabled="!selectedFile || isLoading">
         <span v-if="isLoading">
           <span v-if="uploadProgress < 100"
@@ -86,10 +86,17 @@ const onFileChange = (event: Event) => {
 
 .upload {
   display: flex;
-  flex-grow: 1;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+
+  padding: 16px;
+
+  border: 2px solid #312c2c;
+  border-radius: 1rem;
+}
+
+.input {
+  font-size: 16px;
 }
 
 .download {

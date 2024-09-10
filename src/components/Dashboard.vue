@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import Accordion from 'primevue/accordion';
+import AccordionPanel from 'primevue/accordionpanel';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionContent from 'primevue/accordioncontent';
 import FileUpload from './FileUpload.vue';
 import DataReport from './DataReport.vue';
 import { useSampleApi } from '../hooks/useSampleApi';
@@ -38,22 +42,34 @@ const handleGetSampleFile = async () => {
   <div class="container">
     <div class="left">
       <h2>Laporan Penjualan Shopee</h2>
-      <p>
-        1. Pilih file Excel yang berisi data penjualan Shopee. (<a
-          @click="handleGetSampleFile"
-        >
-          <span v-if="downloadProgress === 0">Unduh sampel input data</span>
-          <span v-else-if="downloadProgress < 100 && downloadProgress > 0"
-            >Downloading... {{ downloadProgress }}%</span
-          > </a
-        >)
-        <br />
-        2. Klik tombol "Upload File" untuk mengirim file.
-        <br />
-        3. Tunggu hingga proses selesai (2-4 menit).
-        <br />
-        4. Klik tombol "Download" untuk mengunduh file hasil.
-      </p>
+      <div class="card">
+        <Accordion>
+          <AccordionPanel value="0">
+            <AccordionHeader>Cara Penggunaan</AccordionHeader>
+            <AccordionContent>
+              <p>
+                1. Pilih file Excel yang berisi data penjualan Shopee. (<a
+                  @click="handleGetSampleFile"
+                >
+                  <span v-if="downloadProgress === 0"
+                    >Unduh sampel input data</span
+                  >
+                  <span
+                    v-else-if="downloadProgress < 100 && downloadProgress > 0"
+                    >Downloading... {{ downloadProgress }}%</span
+                  > </a
+                >)
+                <br />
+                2. Klik tombol "Upload File" untuk mengirim file.
+                <br />
+                3. Tunggu hingga proses selesai (2-4 menit).
+                <br />
+                4. Klik tombol "Download" untuk mengunduh file hasil.
+              </p>
+            </AccordionContent>
+          </AccordionPanel>
+        </Accordion>
+      </div>
       <FileUpload />
     </div>
     <div class="right">
@@ -65,20 +81,27 @@ const handleGetSampleFile = async () => {
 <style scoped>
 .container {
   display: grid;
-  grid-template-columns: 1fr 3.5fr;
+  grid-template-columns: 1fr 2.5fr;
   gap: 16px;
   height: 95vh;
+}
+
+p {
+  font-size: 18px;
 }
 
 .left {
   padding: 24px;
   border-right: 4px solid #312c2c;
-  overflow: hidden; /* Ensure the left side is static */
+  overflow: hidden;
 }
 
 .right {
-  overflow-y: auto; /* Make the right side scrollable */
-  overflow-x: hidden;
-  padding: 24px; /* Optional: Add padding to the right side */
+  overflow: auto;
+  padding: 24px;
+}
+
+.card {
+  margin-bottom: 16px;
 }
 </style>

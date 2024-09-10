@@ -1,9 +1,18 @@
 <template>
   <div class="grid">
-    <apexchart v-for="x in (2)" type="line" :options="chartOptions" :series="series"></apexchart>
-    <apexchart v-for="x in (2)" type="bar" :options="chartOptions" :series="series"></apexchart>
+    <apexchart
+      v-for="x in 2"
+      type="line"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
+    <apexchart
+      v-for="x in 2"
+      type="bar"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
   </div>
-  
 </template>
 
 <script setup lang="ts">
@@ -18,7 +27,7 @@ const series = ref([
 
 const chartOptions = ref({
   chart: {
-    height: 500,
+    height: 200, // Adjust the height as needed
     toolbar: {
       show: false, // Disable the toolbar buttons
     },
@@ -30,6 +39,10 @@ const chartOptions = ref({
     text: 'Monthly Sales',
     align: 'left',
   },
+  grid: {
+    borderColor: '#312c2c', // Set the grid line color
+  },
+  colors: ['#66BB6A'],
   tooltip: {
     enabled: true, // Ensure the tooltip is enabled
     theme: 'dark', // Optional: Set the theme of the tooltip
@@ -49,7 +62,7 @@ const chartOptions = ref({
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 48px; /* Updated gap to 48px */
+  width: 100%;
 }
-
-
 </style>

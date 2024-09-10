@@ -10,7 +10,6 @@
 .navbar {
   display: flex;
   gap: 32px;
-  background-color: rgb(24, 24, 22);
 }
 
 a {
