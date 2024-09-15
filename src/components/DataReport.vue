@@ -1,13 +1,15 @@
 <template>
   <div class="grid">
     <apexchart
-      v-for="x in 2"
+      v-for="index in [1, 2]"
       type="line"
+      :key="index"
       :options="chartOptions"
       :series="series"
     ></apexchart>
     <apexchart
-      v-for="x in 2"
+      v-for="index in [1, 2]"
+      :key="index"
       type="bar"
       :options="chartOptions"
       :series="series"
@@ -27,9 +29,9 @@ const series = ref([
 
 const chartOptions = ref({
   chart: {
-    height: 200, // Adjust the height as needed
+    height: 200,
     toolbar: {
-      show: false, // Disable the toolbar buttons
+      show: false,
     },
   },
   xaxis: {

@@ -13,8 +13,9 @@ const isLoading = ref<boolean>(false);
 const uploadProgress = ref<number>(0);
 const downloadProgress = ref<number>(0);
 
-const { sendExcel, sendExcelForJson } = useSendExcel();
+const { sendExcelForJson } = useSendExcel();
 
+/*
 const submitFile = async () => {
   fileUrl.value = null;
   if (!selectedFile.value) return;
@@ -40,6 +41,33 @@ const submitFile = async () => {
 
   isLoading.value = false;
 };
+*/
+
+const submitFileForJson = async () => {
+  fileUrl.value = null;
+  if (!selectedFile.value) return;
+
+  isLoading.value = true;
+  errorMessage.value = null;
+
+  const { json: resultJson, error } = await sendExcelForJson(
+    selectedFile.value,
+    (progress: number) => {
+      uploadProgress.value = progress;
+    },
+    (progress: number) => {
+      downloadProgress.value = progress;
+    }
+  );
+
+  if (error) {
+    errorMessage.value = error;
+  } else {
+    jsonData.value = resultJson;
+  }
+
+  isLoading.value = false;
+};
 
 const onFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -53,11 +81,9 @@ const onFileChange = (event: Event) => {
   <div class="file-container">
     <div class="upload">
       <input type="file" @change="onFileChange" class="input" />
-      <button @click="submitFile" :disabled="!selectedFile || isLoading">
+      <button @click="submitFileForJson" :disabled="!selectedFile || isLoading">
         <span v-if="isLoading">
-          <span v-if="uploadProgress < 100"
-            >{{ uploadProgress }}%</span
-          >
+          <span v-if="uploadProgress < 100">{{ uploadProgress }}%</span>
           <span v-else-if="downloadProgress < 100 && downloadProgress > 0"
             >{{ downloadProgress }}%</span
           >
@@ -74,10 +100,11 @@ const onFileChange = (event: Event) => {
     </div>
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
   </div>
+  {{ jsonData }}
 </template>
 
 <style scoped>
-.file-container{
+.file-container {
   border: 2px solid #312c2c;
   border-radius: 0.5rem;
   padding: 16px;
@@ -85,14 +112,14 @@ const onFileChange = (event: Event) => {
 
 .upload {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
   margin-bottom: 8px;
 }
 
 .input {
-  font-size:16px;
+  font-size: 16px;
 }
 
 .error {

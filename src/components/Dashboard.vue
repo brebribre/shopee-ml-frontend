@@ -95,7 +95,8 @@ p {
   gap: 16px;
   padding: 24px;
   border-right: 4px solid #312c2c;
-  overflow: hidden;
+  overflow: auto;
+  scrollbar-width: thin;
 }
 
 .right {
