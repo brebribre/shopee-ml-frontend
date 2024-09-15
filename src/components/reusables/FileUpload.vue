@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useSendExcel } from '../../hooks/useSendExcel';
+import { ref, computed } from 'vue';
+import { useSendExcel } from '../../hooks/useSendExcelApi';
+import { useGraphStore } from '../../stores/useGraphStore';
 import LoadingBar from './LoadingBar.vue';
 
 const selectedFile = ref<File | null>(null);
-const fileUrl = ref<string | null>(null);
-const jsonData = ref<JSON>();
-
 const errorMessage = ref<string | null>(null);
-
 const isLoading = ref<boolean>(false);
-const uploadProgress = ref<number>(0);
-const downloadProgress = ref<number>(0);
+
+
+const fileUrl = ref<string | null>(null);
 
 const { sendExcelForJson } = useSendExcel();
+const graphStore = useGraphStore();
+const timeline = computed(() => graphStore.getTimeline());
+const productNames = computed(() => graphStore.getProducts());
 
 /*
 const submitFile = async () => {
@@ -52,18 +53,12 @@ const submitFileForJson = async () => {
 
   const { json: resultJson, error } = await sendExcelForJson(
     selectedFile.value,
-    (progress: number) => {
-      uploadProgress.value = progress;
-    },
-    (progress: number) => {
-      downloadProgress.value = progress;
-    }
   );
 
   if (error) {
     errorMessage.value = error;
   } else {
-    jsonData.value = resultJson;
+    graphStore.setJsonData(JSON.parse(resultJson));
   }
 
   isLoading.value = false;
@@ -81,15 +76,12 @@ const onFileChange = (event: Event) => {
   <div class="file-container">
     <div class="upload">
       <input type="file" @change="onFileChange" class="input" />
-      <button @click="submitFileForJson" :disabled="!selectedFile || isLoading">
-        <span v-if="isLoading">
-          <span v-if="uploadProgress < 100">{{ uploadProgress }}%</span>
-          <span v-else-if="downloadProgress < 100 && downloadProgress > 0"
-            >{{ downloadProgress }}%</span
-          >
-          <span v-else>Processing...</span>
-        </span>
-        <span v-else>Upload File</span>
+      <button
+        @click="submitFileForJson"
+        :disabled="!selectedFile || isLoading"
+        class="upload"
+      >
+        <span>Upload File</span>
       </button>
     </div>
     <LoadingBar :isLoading="isLoading" />
@@ -100,7 +92,6 @@ const onFileChange = (event: Event) => {
     </div>
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
   </div>
-  {{ jsonData }}
 </template>
 
 <style scoped>
@@ -112,10 +103,10 @@ const onFileChange = (event: Event) => {
 
 .upload {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .input {
@@ -133,5 +124,10 @@ const onFileChange = (event: Event) => {
 
 .download {
   width: 100%;
+}
+
+.upload {
+  flex: 1;
+  justify-content: center;
 }
 </style>
