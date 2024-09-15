@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, computed } from 'vue';
+import { defineProps, ref } from 'vue';
 
 import FileUpload from './reusables/FileUpload.vue';
 import Title from './reusables/Title.vue';
@@ -9,7 +9,6 @@ import Instruction from './instructions/ShopeeInstruction.vue';
 import { useGraphStore } from '../stores/useGraphStore';
 import { useSendExcel } from '../hooks/useSendExcelApi';
 
-import Select from 'primevue/select';
 
 defineProps<{}>();
 
@@ -20,12 +19,12 @@ const isLoading = ref(false);
 const graphStore = useGraphStore();
 const { sendExcelForJson } = useSendExcel();
 
-const jsonData = computed(() => graphStore.jsonData);
-const products = computed(() => graphStore.getProducts());
-const timeline = computed(() => graphStore.getTimeline());
 
-const select = ref();
-const list = ref<string[]>([])
+//const jsonData = computed(() => graphStore.jsonData);
+//const timeline = computed(() => graphStore.getTimeline());
+
+
+const productNames = ref<string[]>([])
 
 const submitFileForJson = async (file: File) => {
   isLoading.value = true;
@@ -38,7 +37,7 @@ const submitFileForJson = async (file: File) => {
   }
 
   isLoading.value = false;
-  list.value = graphStore.getProducts();
+  productNames.value = graphStore.getProducts();
 
 };
 </script>
@@ -52,14 +51,6 @@ const submitFileForJson = async (file: File) => {
         :isLoading="isLoading"
         :errorMessage="errorMessage"
         @handleSubmit="submitFileForJson"
-      />
-
-      <Select
-        v-model="select"
-        :options="list"
-        placeholder="Select a Product"
-        class="dropdown"
-        option="test"
       />
     </div>
     <div class="right">
@@ -93,23 +84,10 @@ const submitFileForJson = async (file: File) => {
 
 .dropdown {
   width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 8px;
-
   border: 1px solid #312c2c;
-}
-
-.p-select-option {
-  padding: 20px;
-  border: 1px solid #312c2c;
-  background-color: #f9f9f9;
-}
-
-.p-select-option:hover {
-  background-color: #e0e0e0;
 }
 </style>
