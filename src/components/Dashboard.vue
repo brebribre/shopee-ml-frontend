@@ -1,75 +1,66 @@
 <script setup lang="ts">
-import Accordion from 'primevue/accordion';
-import AccordionPanel from 'primevue/accordionpanel';
-import AccordionHeader from 'primevue/accordionheader';
-import AccordionContent from 'primevue/accordioncontent';
+import { defineProps, ref, computed } from 'vue';
+
 import FileUpload from './reusables/FileUpload.vue';
+import Title from './reusables/Title.vue';
 import DataReport from './DataReport.vue';
-import { useSampleApi } from '../hooks/useSampleApi';
-import { defineProps, ref } from 'vue';
+import Instruction from './instructions/ShopeeInstruction.vue';
+
+import { useGraphStore } from '../stores/useGraphStore';
+import { useSendExcel } from '../hooks/useSendExcelApi';
+
+import Select from 'primevue/select';
 
 defineProps<{}>();
 
-const downloadProgress = ref<number>(0);
+const errorMessage = ref('');
+const isLoading = ref(false);
 
-const { getSampleData } = useSampleApi();
-const handleGetSampleFile = async () => {
-  try {
-    const { fileUrl: resultUrl, error } = await getSampleData(
-      (progress: number) => {
-        downloadProgress.value = progress;
-      }
-    );
+//File Upload
+const graphStore = useGraphStore();
+const { sendExcelForJson } = useSendExcel();
 
-    if (error) {
-      throw new Error(error);
-    } else {
-      const link = document.createElement('a');
-      link.href = resultUrl ?? '';
-      link.download = 'sample-data.xlsx';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      downloadProgress.value = 0;
-    }
-  } catch (err) {
-    console.error('Failed to download the file:', err);
+const jsonData = computed(() => graphStore.jsonData);
+const products = computed(() => graphStore.getProducts());
+const timeline = computed(() => graphStore.getTimeline());
+
+const select = ref();
+const list = ref<string[]>([])
+
+const submitFileForJson = async (file: File) => {
+  isLoading.value = true;
+  const { json: resultJson, error } = await sendExcelForJson(file);
+
+  if (error) {
+    errorMessage.value = error;
+  } else {
+    graphStore.setJsonData(JSON.parse(resultJson));
   }
+
+  isLoading.value = false;
+  list.value = graphStore.getProducts();
+
 };
 </script>
 
 <template>
   <div class="container">
     <div class="left">
-      <h1 class="title">Laporan Penjualan Shopee</h1>
-      <Accordion>
-        <AccordionPanel value="0">
-          <AccordionHeader class="acc">
-            <span>Instructions</span>
-          </AccordionHeader>
-          <AccordionContent class="acc-content">
-            <p>
-              1. Pilih file Excel yang berisi data penjualan Shopee. (<a
-                @click="handleGetSampleFile"
-              >
-                <span v-if="downloadProgress === 0"
-                  >Unduh sampel input data</span
-                >
-                <span v-else-if="downloadProgress < 100 && downloadProgress > 0"
-                  >Downloading... {{ downloadProgress }}%</span
-                > </a
-              >)
-              <br />
-              2. Klik tombol "Upload File" untuk mengirim file.
-              <br />
-              3. Tunggu hingga proses selesai (2-4 menit).
-              <br />
-              4. Klik tombol "Download" untuk mengunduh file hasil.
-            </p>
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
-      <FileUpload />
+      <Title>Laporan Penjualan Shopee</Title>
+      <Instruction />
+      <FileUpload
+        :isLoading="isLoading"
+        :errorMessage="errorMessage"
+        @handleSubmit="submitFileForJson"
+      />
+
+      <Select
+        v-model="select"
+        :options="list"
+        placeholder="Select a Product"
+        class="dropdown"
+        option="test"
+      />
     </div>
     <div class="right">
       <DataReport />
@@ -81,12 +72,7 @@ const handleGetSampleFile = async () => {
 .container {
   display: grid;
   grid-template-columns: 1fr 2.5fr;
-  gap: 16px;
   height: 95vh;
-}
-
-p {
-  font-size: 18px;
 }
 
 .left {
@@ -94,6 +80,7 @@ p {
   flex-direction: column;
   gap: 16px;
   padding: 24px;
+
   border-right: 4px solid #312c2c;
   overflow: auto;
   scrollbar-width: thin;
@@ -104,22 +91,25 @@ p {
   padding: 24px;
 }
 
-.card {
-  margin-bottom: 16px;
-}
-
-.acc {
-  display: flex;
-  justify-content: space-between;
+.dropdown {
   width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px;
+
+  border: 1px solid #312c2c;
 }
 
-.acc-content {
-  margin-top: 16px;
+.p-select-option {
+  padding: 20px;
+  border: 1px solid #312c2c;
+  background-color: #f9f9f9;
 }
 
-.title {
-  font-size: 2rem;
-  font-weight: 700;
+.p-select-option:hover {
+  background-color: #e0e0e0;
 }
 </style>

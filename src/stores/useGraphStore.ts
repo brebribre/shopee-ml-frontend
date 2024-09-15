@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { reactive, computed, ref } from 'vue';
+import { reactive } from 'vue';
 
 export const useGraphStore = defineStore('graph', () => {
   const jsonData = reactive<Record<string, any>>({});
@@ -8,22 +8,21 @@ export const useGraphStore = defineStore('graph', () => {
     Object.assign(jsonData, data);
   };
 
-  const getTimeline = () => {
+  const getTimeline = (): string[] => {
     return Object.keys(jsonData);
   };
 
-  const getProducts = () => {
+  const getProducts = (): string[] => {
     const products = jsonData[getTimeline()[0]];
-    const productNames: any[] = []
+    const productNames: any[] = [];
 
-    if(!products) return [];
-    
-    products.forEach((product:any) => {
-      productNames.push(product["Nama Produk"]);
+    if (!products) return [];
+    products.forEach((product: any) => {
+      productNames.push(product['Nomor Referensi SKU']);
     });
 
     return productNames;
   };
-  
+
   return { jsonData, setJsonData, getTimeline, getProducts };
 });
