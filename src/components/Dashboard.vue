@@ -1,77 +1,99 @@
 <script setup lang="ts">
-import FileUpload from './FileUpload.vue';
-import { useSampleApi } from '../hooks/useSampleApi';
 import { defineProps, ref } from 'vue';
+
+import FileUpload from './reusables/FileUpload.vue';
+import Title from './reusables/Title.vue';
+import Instruction from './instructions/ShopeeInstruction.vue';
+
+import { useGraphStore } from '../stores/useGraphStore';
+import { useSendExcel } from '../hooks/useSendExcelApi';
 
 defineProps<{}>();
 
-const downloadProgress = ref<number>(0);
+const errorMessage = ref('');
+const isLoading = ref(false);
 
-const { getSampleData } = useSampleApi();
-const handleGetSampleFile = async () => {
-  try {
-    const { fileUrl: resultUrl, error } = await getSampleData(
-      (progress: number) => {
-        downloadProgress.value = progress;
-      }
-    );
+//File Upload
+const graphStore = useGraphStore();
+const { sendExcel } = useSendExcel();
 
-    if (error) {
-      throw new Error(error);
-    } else {
-      const link = document.createElement('a');
-      link.href = resultUrl ?? '';
-      link.download = 'sample-data.xlsx';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      downloadProgress.value = 0;
-    }
-  } catch (err) {
-    console.error('Failed to download the file:', err);
+//const jsonData = computed(() => graphStore.jsonData);
+//const timeline = computed(() => graphStore.getTimeline());
+
+//const productNames = ref<string[]>([]);
+
+const submitFileForJson = async (file: File) => {
+  isLoading.value = true;
+  //const { json: resultJson, error } = await sendExcelForJson(file);
+  const { fileUrl, error } = await sendExcel(file);
+
+  if (error) {
+    errorMessage.value = error;
+  } else {
+    //graphStore.setJsonData(JSON.parse(resultJson));
+    graphStore.setUrl(fileUrl ?? '');
   }
+
+  isLoading.value = false;
+  //productNames.value = graphStore.getProducts();
 };
 </script>
 
 <template>
   <div class="container">
-    <h2>Laporan Penjualan Shopee</h2>
-    <p>
-      1. Pilih file Excel yang berisi data penjualan Shopee.
-      <br />
-      2. Klik tombol "Upload File" untuk mengirim file.
-      <br />
-      3. Tunggu hingga proses selesai (2-4 menit).
-      <br />
-      4. Klik tombol "Download" untuk mengunduh file hasil.
-    </p>
-    <button @click="handleGetSampleFile">
-      <span v-if="downloadProgress === 0">Unduh sampel input data</span>
-      <span v-else-if="downloadProgress < 100 && downloadProgress > 0"
-        >Processing... {{ downloadProgress }}%</span
+    <div class="left">
+      <Title>Laporan Penjualan Shopee</Title>
+      <Instruction />
+      <FileUpload
+        :isLoading="isLoading"
+        :errorMessage="errorMessage"
+        @handleSubmit="submitFileForJson"
+      />
+      <a
+        class="download"
+        v-if="graphStore.excelUrl"
+        :href="graphStore.excelUrl"
+        download="processed-data.xlsx"
+        >Download Processed File</a
       >
-    </button>
-    <FileUpload />
+    </div>
+    <div class="right"></div>
   </div>
 </template>
 
 <style scoped>
 .container {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  height: 95vh;
+}
+
+.left {
   display: flex;
   flex-direction: column;
-  margin-top: 24px;
-  text-align: center;
-  align-items: center;
+  gap: 16px;
+  padding: 24px;
+
+  border-right: 4px solid #312c2c;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+.right {
+  overflow: auto;
+  padding: 24px;
+}
+
+.dropdown {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1px solid #312c2c;
 }
 
-h2 {
-  font-size: 32px;
-  color: #42b983;
-}
-
-p {
-  font-size: 16px;
-  color: #c7cbc6;
+.download {
+  text-align: center;
 }
 </style>

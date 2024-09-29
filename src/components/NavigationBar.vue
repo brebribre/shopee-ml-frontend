@@ -10,11 +10,15 @@
 .navbar {
   display: flex;
   gap: 32px;
-  background-color: rgb(24, 24, 22);
 }
 
 a {
   padding: 8px 12px;
   color: whitesmoke;
+}
+
+button {
+  display: flex;
+  align-items: center;
 }
 </style>

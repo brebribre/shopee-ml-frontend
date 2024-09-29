@@ -10,13 +10,20 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "apexcharts": "^3.53.0",
     "axios": "^1.7.7",
-    "primevue": "^4.0.5",
-    "vue": "^3.4.37"
+    "pinia": "^2.2.2",
+    "primevue": "^4.0.6",
+    "vue": "^3.4.37",
+    "vue-router": "^4.4.5",
+    "vue3-apexcharts": "^1.6.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
     "prettier": "3.3.3",
+    "tailwindcss": "^3.4.10",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
     "vue-tsc": "^2.0.29"
