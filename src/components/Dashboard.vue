@@ -3,7 +3,6 @@ import { defineProps, ref } from 'vue';
 
 import FileUpload from './reusables/FileUpload.vue';
 import Title from './reusables/Title.vue';
-import DataReport from './DataReport.vue';
 import Instruction from './instructions/ShopeeInstruction.vue';
 
 import { useGraphStore } from '../stores/useGraphStore';
