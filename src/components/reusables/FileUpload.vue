@@ -41,7 +41,7 @@ const onFileChange = (event: Event) => {
         :disabled="!selectedFile || isLoading"
         class="upload"
       >
-        <span>Upload File</span>
+        <span>Upload</span>
       </button>
     </div>
     <LoadingBar :isLoading="isLoading" class="loading" />

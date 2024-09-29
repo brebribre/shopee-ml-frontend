@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Dashboard from './components/Dashboard.vue';
-import NavigationBar from './components/NavigationBar.vue';
+import Dashboard from './components/containers/Dashboard.vue';
+import NavigationBar from './components/containers/NavigationBar.vue';
 </script>
 
 <template>

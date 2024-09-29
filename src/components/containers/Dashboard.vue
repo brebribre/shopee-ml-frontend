@@ -1,41 +1,30 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 
-import FileUpload from './reusables/FileUpload.vue';
-import Title from './reusables/Title.vue';
-import Instruction from './instructions/ShopeeInstruction.vue';
+import FileUpload from '../reusables/FileUpload.vue';
+import Title from '../reusables/Title.vue';
+import Instruction from '../instructions/ShopeeInstruction.vue';
 
-import { useGraphStore } from '../stores/useGraphStore';
-import { useSendExcel } from '../hooks/useSendExcelApi';
-
-defineProps<{}>();
+import { useGraphStore } from '../../stores/useGraphStore';
+import { useSendExcel } from '../../hooks/useSendExcelApi';
 
 const errorMessage = ref('');
 const isLoading = ref(false);
 
-//File Upload
 const graphStore = useGraphStore();
 const { sendExcel } = useSendExcel();
 
-//const jsonData = computed(() => graphStore.jsonData);
-//const timeline = computed(() => graphStore.getTimeline());
-
-//const productNames = ref<string[]>([]);
-
 const submitFileForJson = async (file: File) => {
   isLoading.value = true;
-  //const { json: resultJson, error } = await sendExcelForJson(file);
   const { fileUrl, error } = await sendExcel(file);
 
   if (error) {
     errorMessage.value = error;
   } else {
-    //graphStore.setJsonData(JSON.parse(resultJson));
     graphStore.setUrl(fileUrl ?? '');
   }
 
   isLoading.value = false;
-  //productNames.value = graphStore.getProducts();
 };
 </script>
 
