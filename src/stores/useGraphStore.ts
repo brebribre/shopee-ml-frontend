@@ -1,11 +1,16 @@
 import { defineStore } from 'pinia';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 
 export const useGraphStore = defineStore('graph', () => {
   const jsonData = reactive<Record<string, any>>({});
+  const excelUrl = ref<string>('');
 
   const setJsonData = (data: Record<string, any>) => {
     Object.assign(jsonData, data);
+  };
+
+  const setUrl = (url: string) => {
+    excelUrl.value = url;
   };
 
   const getTimeline = (): string[] => {
@@ -18,11 +23,11 @@ export const useGraphStore = defineStore('graph', () => {
 
     if (!products) return [];
     products.forEach((product: any) => {
-      productNames.push(product['Nomor Referensi SKU']);
+      productNames.push(product['Nama Produk']);
     });
 
     return productNames;
   };
 
-  return { jsonData, setJsonData, getTimeline, getProducts };
+  return { jsonData, excelUrl, setJsonData, setUrl, getTimeline, getProducts };
 });

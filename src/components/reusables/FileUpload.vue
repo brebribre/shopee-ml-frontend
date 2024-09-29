@@ -30,7 +30,12 @@ const onFileChange = (event: Event) => {
 <template>
   <div class="file-container">
     <div class="upload">
-      <input type="file" @change="onFileChange" class="input" />
+      <input
+        type="file"
+        @change="onFileChange"
+        class="input"
+        accept=".xlsx, .xls"
+      />
       <button
         @click="handleUpload"
         :disabled="!selectedFile || isLoading"

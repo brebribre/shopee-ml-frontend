@@ -9,7 +9,6 @@ import Instruction from './instructions/ShopeeInstruction.vue';
 import { useGraphStore } from '../stores/useGraphStore';
 import { useSendExcel } from '../hooks/useSendExcelApi';
 
-
 defineProps<{}>();
 
 const errorMessage = ref('');
@@ -17,28 +16,27 @@ const isLoading = ref(false);
 
 //File Upload
 const graphStore = useGraphStore();
-const { sendExcelForJson } = useSendExcel();
-
+const { sendExcel } = useSendExcel();
 
 //const jsonData = computed(() => graphStore.jsonData);
 //const timeline = computed(() => graphStore.getTimeline());
 
-
-const productNames = ref<string[]>([])
+//const productNames = ref<string[]>([]);
 
 const submitFileForJson = async (file: File) => {
   isLoading.value = true;
-  const { json: resultJson, error } = await sendExcelForJson(file);
+  //const { json: resultJson, error } = await sendExcelForJson(file);
+  const { fileUrl, error } = await sendExcel(file);
 
   if (error) {
     errorMessage.value = error;
   } else {
-    graphStore.setJsonData(JSON.parse(resultJson));
+    //graphStore.setJsonData(JSON.parse(resultJson));
+    graphStore.setUrl(fileUrl ?? '');
   }
 
   isLoading.value = false;
-  productNames.value = graphStore.getProducts();
-
+  //productNames.value = graphStore.getProducts();
 };
 </script>
 
@@ -52,10 +50,15 @@ const submitFileForJson = async (file: File) => {
         :errorMessage="errorMessage"
         @handleSubmit="submitFileForJson"
       />
+      <a
+        class="download"
+        v-if="graphStore.excelUrl"
+        :href="graphStore.excelUrl"
+        download="processed-data.xlsx"
+        >Download Processed File</a
+      >
     </div>
-    <div class="right">
-      <DataReport />
-    </div>
+    <div class="right"></div>
   </div>
 </template>
 
@@ -89,5 +92,9 @@ const submitFileForJson = async (file: File) => {
   justify-content: space-between;
   padding: 8px;
   border: 1px solid #312c2c;
+}
+
+.download {
+  text-align: center;
 }
 </style>
