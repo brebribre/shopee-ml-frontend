@@ -6,7 +6,7 @@ export const useSampleApi = () => {
   ) => {
     try {
       const response = await axios.get(
-        'http://127.0.0.1:5000/api/sample/sales',
+        'https://oyster-app-s5mct.ondigitalocean.app/api/sample/sales',
         {
           responseType: 'blob',
           onDownloadProgress: (progressEvent) => {
