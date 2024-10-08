@@ -12,14 +12,17 @@ const emit = defineEmits<{
 }>();
 
 const handleUpload = () => {
+  fileUrl.value = undefined;
   if (selectedFile.value) {
     emit('handleSubmit', selectedFile.value);
   }
 };
 
-const selectedFile = ref<File | null>(null);
-const fileUrl = ref<string | null>(null);
+const selectedFile = ref<File | undefined>(undefined);
+const fileUrl = ref<string | undefined>(undefined);
+
 const onFileChange = (event: Event) => {
+  fileUrl.value = undefined;
   const target = event.target as HTMLInputElement;
   if (target.files && target.files[0]) {
     selectedFile.value = target.files[0];
@@ -32,41 +35,29 @@ const onFileChange = (event: Event) => {
     <div class="upload">
       <input
         type="file"
+        id="fileInput"
         @change="onFileChange"
         class="input"
         accept=".xlsx, .xls"
       />
-      <button
-        @click="handleUpload"
-        :disabled="!selectedFile || isLoading"
-        class="upload"
-      >
-        <span>Upload</span>
-      </button>
     </div>
-    <LoadingBar :isLoading="isLoading" class="loading" />
-    <div v-if="fileUrl" class="statusMessage">
-      <button :href="fileUrl" download="processed_file.xlsx" class="download">
-        Download Processed File
-      </button>
-    </div>
-    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
   </div>
+  <button
+    @click="handleUpload"
+    :disabled="!selectedFile || isLoading"
+    :class="{ disabled: !selectedFile || isLoading, upload: true }"
+  >
+    <span>Generate Report</span>
+  </button>
+  <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+  <LoadingBar :isLoading="isLoading" class="loading" />
 </template>
 
 <style scoped>
-.file-container {
+.upload {
   border: 2px solid #312c2c;
   border-radius: 0.5rem;
   padding: 16px;
-}
-
-.upload {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .input {
@@ -86,12 +77,15 @@ const onFileChange = (event: Event) => {
   width: 100%;
 }
 
-.upload {
-  flex: 1;
-  justify-content: center;
-}
-
 .loading {
   margin-top: 8px;
+}
+
+.disabled{
+  opacity:40%;
+}
+
+.disabled:hover{
+  cursor: not-allowed;
 }
 </style>

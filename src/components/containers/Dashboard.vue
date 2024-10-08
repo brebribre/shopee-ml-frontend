@@ -16,6 +16,8 @@ const { sendExcel } = useSendExcel();
 
 const submitFileForJson = async (file: File) => {
   isLoading.value = true;
+  errorMessage.value = '';
+  graphStore.setUrl('')
   const { fileUrl, error } = await sendExcel(file);
 
   if (error) {
@@ -43,7 +45,7 @@ const submitFileForJson = async (file: File) => {
         v-if="graphStore.excelUrl"
         :href="graphStore.excelUrl"
         download="processed-data.xlsx"
-        >Download Processed File</a
+        >Download .xlsx File</a
       >
     </div>
     <div class="right"></div>

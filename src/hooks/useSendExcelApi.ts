@@ -11,7 +11,7 @@ export const useSendExcel = () => {
 
     try {
       const response = await axios.post(
-        'https://oyster-app-s5mct.ondigitalocean.app/api/process-excel',
+        'http://127.0.0.1:5000/api/process-excel',
         formData,
         {
           headers: {
